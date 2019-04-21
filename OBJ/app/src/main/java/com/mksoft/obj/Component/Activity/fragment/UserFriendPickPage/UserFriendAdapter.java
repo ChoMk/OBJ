@@ -1,22 +1,88 @@
 package com.mksoft.obj.Component.Activity.fragment.UserFriendPickPage;
 
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.mksoft.obj.Component.Activity.MainActivity;
 import com.mksoft.obj.Component.Activity.fragment.AllViewFeedPage.FeedAdapter;
+import com.mksoft.obj.Component.Activity.fragment.OfferedImagePage.OfferedImageAdapter;
+import com.mksoft.obj.R;
+import com.mksoft.obj.Repository.FriendData;
+import com.mksoft.obj.Repository.OfferedImageData;
 
+import java.util.Collections;
+import java.util.List;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class UserFriendAdapter extends Fragment {
-    RecyclerView recyclerView;
-    RecyclerView.LayoutManager layoutManager;
-    UserFriendAdapter userFriendAdapter;
+public class UserFriendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
-    MainActivity mainActivity;
+    public static class MyViewHolder extends RecyclerView.ViewHolder {
+        TextView friendName;
+        MyViewHolder(View view){
+            super(view);
+            friendName = view.findViewById(R.id.userFriendName);
+        }
+    }
+    List<FriendData> items =  Collections.emptyList();
+    Context context;
 
-    Button nextButton;
+    UserFriendAdapter.MyViewHolder myViewHolder;
 
+    public UserFriendAdapter(Context context){
+        this.context = context;
+
+    }
+
+
+    @NonNull
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.user_friend_pick_paget_item, parent, false);
+
+        return new UserFriendAdapter.MyViewHolder(v);
+    }
+
+    //Bundle bundle;
+    //FeedItemViewFragment FeedItemViewFragment;
+    @Override
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
+        myViewHolder = (UserFriendAdapter.MyViewHolder) holder;
+        myViewHolder.friendName.setText(items.get(position).getFriendName());
+        myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+            }
+        });
+    }
+
+    @Override
+    public int getItemCount() {
+        return items.size();
+    }
+
+    public void deleteItem(int position) {
+        items.remove(position);
+        notifyItemRemoved(position);
+    }//밀어서 삭제 (스와이브 삭제 용)
+
+
+    public void refreshItem(List<FriendData> items){
+        this.items = items;
+        notifyDataSetChanged();
+    }
+    public FriendData getItem(int idx){
+        return items.get(idx);
+    }
+    public List<FriendData> getAllItem(){return items;}
 
 
 
