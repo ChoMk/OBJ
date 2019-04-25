@@ -5,6 +5,12 @@ import java.util.ArrayList;
 public class FriendData {
     private int id;
     private String name;
+    FriendData(){}
+
+    public FriendData(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 
     public int getId() {
         return id;

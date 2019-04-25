@@ -3,7 +3,13 @@ package com.mksoft.obj.Repository.Data;
 public class OfferedImageData {
     private int id = 0;
     private String imageName;
-    private String GIFPath;
+    private int GIFPath;
+
+    public OfferedImageData(int id, String imageName, int GIFPath) {
+        this.id = id;
+        this.imageName = imageName;
+        this.GIFPath = GIFPath;
+    }
 
     public int getId() {
         return id;
@@ -21,11 +27,11 @@ public class OfferedImageData {
         this.imageName = imageName;
     }
 
-    public String getGIFPath() {
+    public int getGIFPath() {
         return GIFPath;
     }
 
-    public void setGIFPath(String GIFPath) {
+    public void setGIFPath(int GIFPath) {
         this.GIFPath = GIFPath;
     }
 }

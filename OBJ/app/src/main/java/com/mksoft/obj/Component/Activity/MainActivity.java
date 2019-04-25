@@ -10,6 +10,8 @@ import com.mksoft.obj.Repository.APIRepo;
 import com.mksoft.obj.Repository.Data.FriendData;
 import com.mksoft.obj.Repository.Data.UserData;
 
+import java.util.ArrayList;
+
 import javax.inject.Inject;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,7 +21,6 @@ import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.HasSupportFragmentInjector;
 
 public class MainActivity extends AppCompatActivity implements HasSupportFragmentInjector {
-
 
 
     public static MainActivity mainActivity;

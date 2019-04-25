@@ -45,7 +45,7 @@ public class APIRepo {
         });
 
     }
-    public void getUserInfo(String userID){
+    public void getUserInfo(final String userID){
         Call<UserData>call =webservice.getUser(userID);
         call.enqueue(new Callback<UserData>() {
             @Override

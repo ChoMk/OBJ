@@ -1,13 +1,18 @@
 package com.mksoft.obj.Component.Activity.fragment.OfferedImagePage;
 
 import android.content.Context;
+import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.mksoft.obj.Component.Activity.MainActivity;
+import com.mksoft.obj.Component.Activity.fragment.UserFriendPickPage.UserFriendPickPageFragment;
 import com.mksoft.obj.R;
 import com.mksoft.obj.Repository.Data.OfferedImageData;
 
@@ -15,6 +20,7 @@ import java.util.Collections;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class OfferedImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -46,8 +52,9 @@ public class OfferedImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         return new OfferedImageAdapter.MyViewHolder(v);
     }
 
-    //Bundle bundle;
-    //FeedItemViewFragment FeedItemViewFragment;
+    FragmentTransaction fragmentTransaction;
+    UserFriendPickPageFragment userFriendPickPageFragment;
+    Bundle bundle;
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
         myViewHolder = (OfferedImageAdapter.MyViewHolder) holder;
@@ -57,6 +64,19 @@ public class OfferedImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                bundle = new Bundle();
+                bundle.putString("imageName", items.get(position).getImageName());
+
+                userFriendPickPageFragment = new UserFriendPickPageFragment();
+                userFriendPickPageFragment.setArguments(bundle);
+                Toast toast = Toast.makeText(MainActivity.mainActivity.getApplicationContext(), items.get((position)).getImageName()+
+                        "을 선택하셨습니다.", Toast.LENGTH_LONG);
+                toast.setGravity(Gravity.CENTER, Gravity.CENTER, 0);
+                toast.show();
+                fragmentTransaction = MainActivity.mainActivity.getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.mainContainer, userFriendPickPageFragment,null);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
             }
         });
     }

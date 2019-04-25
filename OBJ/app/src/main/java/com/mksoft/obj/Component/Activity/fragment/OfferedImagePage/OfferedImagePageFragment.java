@@ -11,6 +11,9 @@ import com.mksoft.obj.Component.Activity.MainActivity;
 import com.mksoft.obj.Component.Activity.fragment.UserFriendPickPage.UserFriendPickPageFragment;
 import com.mksoft.obj.R;
 import com.mksoft.obj.Repository.APIRepo;
+import com.mksoft.obj.Repository.Data.OfferedImageData;
+
+import java.util.ArrayList;
 
 import javax.inject.Inject;
 
@@ -26,10 +29,10 @@ public class OfferedImagePageFragment extends Fragment {
     RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
     OfferedImageAdapter offeredImageAdapter;
-    FragmentTransaction fragmentTransaction;
 
 
-    Button nextButton;
+
+
     @Inject
     APIRepo apiRepo;
     @Override
@@ -63,9 +66,9 @@ public class OfferedImagePageFragment extends Fragment {
 
         init(rootView);
 
-        clickAddButton();
 
         hideKeyboard();
+
 
         return rootView;
     }
@@ -75,8 +78,9 @@ public class OfferedImagePageFragment extends Fragment {
 
         recyclerView = (RecyclerView)rootView.findViewById(R.id.offeredImageRecyclerView);
         layoutManager = new LinearLayoutManager(rootView.getContext());
-        nextButton = rootView.findViewById(R.id.nextButton);
+
         initListView();
+
     }
 
     private void initListView(){
@@ -86,23 +90,23 @@ public class OfferedImagePageFragment extends Fragment {
         recyclerView.setAdapter(offeredImageAdapter);
         recyclerView.setLayoutManager(layoutManager);
 
+        makeOfferedList();//어뎁터에 들어갈 이미지 초기화
+
     }
 
-    private void clickAddButton(){
 
-        nextButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                fragmentTransaction = getFragmentManager().beginTransaction();
-                MainActivity.mainActivity.getSupportFragmentManager().popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                fragmentTransaction.replace(R.id.mainContainer, new UserFriendPickPageFragment(), null);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-            }
-        });
-    }
     private void hideKeyboard(){
         MainActivity.mainActivity.getHideKeyboard().hideKeyboard();
     }
 
+    private void makeOfferedList(){
+        ArrayList<OfferedImageData> offeredImageDataList = new ArrayList<>();
+
+        offeredImageDataList.add(new OfferedImageData(1, "test1", R.drawable.test1));
+        offeredImageDataList.add(new OfferedImageData(2, "test2", R.drawable.test2));
+
+
+
+        offeredImageAdapter.refreshItem(offeredImageDataList);
+    }//어뎁터에 들어갈 이미지 초기화
 }

@@ -1,21 +1,29 @@
 package com.mksoft.obj.Component.Activity.fragment.UserFriendPickPage;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.mksoft.obj.Component.Activity.MainActivity;
 import com.mksoft.obj.Component.Activity.fragment.AllViewFeedPage.AllViewFeedPageFragment;
 import com.mksoft.obj.Component.Activity.fragment.OfferedImagePage.OfferedImageAdapter;
 import com.mksoft.obj.R;
 import com.mksoft.obj.Repository.APIRepo;
+import com.mksoft.obj.Repository.Data.FriendData;
+import com.mksoft.obj.Repository.Data.OfferedImageData;
+
+import java.util.ArrayList;
 
 import javax.inject.Inject;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -28,11 +36,13 @@ public class UserFriendPickPageFragment extends Fragment {
     RecyclerView.LayoutManager layoutManager;
     UserFriendAdapter userFriendAdapter;
     FragmentTransaction fragmentTransaction;
-
+    String selectedOfferedImageName;
 
     Button submitButton;
     @Inject
     APIRepo apiRepo;
+
+    AlertDialog dialog;
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -72,11 +82,13 @@ public class UserFriendPickPageFragment extends Fragment {
 
     private void init(ViewGroup rootView){
 
-
+        selectedOfferedImageName = getArguments().getString("imageName");
+        Log.d("argu", selectedOfferedImageName);
         recyclerView = (RecyclerView)rootView.findViewById(R.id.userFriendRecyclerView);
         layoutManager = new LinearLayoutManager(rootView.getContext());
-        submitButton = rootView.findViewById(R.id.nextButton);
+        submitButton = rootView.findViewById(R.id.submitButton);
         initListView();
+        testMakeFriend();
     }
 
     private void initListView(){
@@ -93,16 +105,45 @@ public class UserFriendPickPageFragment extends Fragment {
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fragmentTransaction = MainActivity.mainActivity.getSupportFragmentManager().beginTransaction();
-                MainActivity.mainActivity.getSupportFragmentManager().popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                fragmentTransaction.replace(R.id.mainContainer, new AllViewFeedPageFragment(), null);
-                fragmentTransaction.commit();
+                dialogShow();
             }
         });
     }
     private void hideKeyboard(){
         MainActivity.mainActivity.getHideKeyboard().hideKeyboard();
     }
+    private void testMakeFriend(){
+        ArrayList<FriendData> friendDataList = new ArrayList<>();
 
+        friendDataList.add(new FriendData(1, "규택"));
+        friendDataList.add(new FriendData(2, "동민"));
+
+
+
+        userFriendAdapter.refreshItem(friendDataList);
+    }
+    private void dialogShow()
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle(userFriendAdapter.getItem(userFriendAdapter.getLastSelectedPosition()).getName()+"과 "
+        +selectedOfferedImageName+"을 추시겠습니까?");
+        builder.setMessage("한번 더 확인하세요 ! ");
+        builder.setPositiveButton("예",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        fragmentTransaction = MainActivity.mainActivity.getSupportFragmentManager().beginTransaction();
+                        MainActivity.mainActivity.getSupportFragmentManager().popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                        fragmentTransaction.replace(R.id.mainContainer, new AllViewFeedPageFragment(), null);
+                        fragmentTransaction.commit();
+                    }
+                });
+        builder.setNegativeButton("아니오",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+        builder.show();
+    }
 
 }
