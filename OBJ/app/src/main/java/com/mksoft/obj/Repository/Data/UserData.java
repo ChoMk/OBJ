@@ -1,8 +1,10 @@
-package com.mksoft.obj.Repository;
+package com.mksoft.obj.Repository.Data;
+
+import java.util.ArrayList;
 
 public class UserData {
     private int id = 0;
-    private String userName;
+    private String name;
 
     public int getId() {
         return id;
@@ -13,10 +15,10 @@ public class UserData {
     }
 
     public String getUserName() {
-        return userName;
+        return name;
     }
 
     public void setUserName(String userName) {
-        this.userName = userName;
+        this.name = userName;
     }
 }

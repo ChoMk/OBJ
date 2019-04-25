@@ -1,7 +1,6 @@
 package com.mksoft.obj.Component.Activity.fragment.AllViewFeedPage;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,15 +8,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.mksoft.obj.Component.Activity.MainActivity;
 import com.mksoft.obj.R;
-import com.mksoft.obj.Repository.FeedData;
+import com.mksoft.obj.Repository.Data.FeedData;
 
 import java.util.Collections;
 import java.util.List;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{

@@ -11,6 +11,9 @@ import com.mksoft.obj.Component.Activity.MainActivity;
 import com.mksoft.obj.Component.Activity.fragment.OfferedImagePage.OfferedImageAdapter;
 import com.mksoft.obj.Component.Activity.fragment.OfferedImagePage.OfferedImagePageFragment;
 import com.mksoft.obj.R;
+import com.mksoft.obj.Repository.APIRepo;
+
+import javax.inject.Inject;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -18,6 +21,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import dagger.android.support.AndroidSupportInjection;
 
 public class AllViewFeedPageFragment extends Fragment {
     RecyclerView recyclerView;
@@ -29,6 +33,8 @@ public class AllViewFeedPageFragment extends Fragment {
 
     FragmentTransaction fragmentTransaction;
 
+    @Inject
+    APIRepo apiRepo;
 
     @Override
     public void onAttach(Context context) {
@@ -42,11 +48,16 @@ public class AllViewFeedPageFragment extends Fragment {
         //this.configureViewModel();
     }
 
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //this.configureDagger();
+        this.configureDagger();
     }
+    private void configureDagger(){
+        AndroidSupportInjection.inject(this);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container,

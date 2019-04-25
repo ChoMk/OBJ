@@ -4,23 +4,15 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.mksoft.obj.Component.Activity.MainActivity;
-import com.mksoft.obj.Component.Activity.fragment.AllViewFeedPage.FeedAdapter;
-import com.mksoft.obj.Component.Activity.fragment.OfferedImagePage.OfferedImageAdapter;
 import com.mksoft.obj.R;
-import com.mksoft.obj.Repository.FriendData;
-import com.mksoft.obj.Repository.OfferedImageData;
+import com.mksoft.obj.Repository.Data.FriendData;
 
 import java.util.Collections;
 import java.util.List;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class UserFriendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
@@ -56,7 +48,7 @@ public class UserFriendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
         myViewHolder = (UserFriendAdapter.MyViewHolder) holder;
-        myViewHolder.friendName.setText(items.get(position).getFriendName());
+        myViewHolder.friendName.setText(items.get(position).getName());
         myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -1,4 +1,4 @@
-package com.mksoft.obj.Repository;
+package com.mksoft.obj.Repository.Data;
 
 import java.io.Serializable;
 

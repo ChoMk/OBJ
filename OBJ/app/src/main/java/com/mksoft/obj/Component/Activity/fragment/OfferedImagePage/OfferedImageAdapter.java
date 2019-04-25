@@ -8,16 +8,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.mksoft.obj.Component.Activity.fragment.AllViewFeedPage.FeedAdapter;
 import com.mksoft.obj.R;
-import com.mksoft.obj.Repository.FeedData;
-import com.mksoft.obj.Repository.OfferedImageData;
+import com.mksoft.obj.Repository.Data.OfferedImageData;
 
 import java.util.Collections;
 import java.util.List;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class OfferedImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
