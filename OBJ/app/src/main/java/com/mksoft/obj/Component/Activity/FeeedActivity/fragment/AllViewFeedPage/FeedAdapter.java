@@ -1,4 +1,4 @@
-package com.mksoft.obj.Component.Activity.fragment.AllViewFeedPage;
+package com.mksoft.obj.Component.Activity.FeeedActivity.fragment.AllViewFeedPage;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -45,7 +45,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.all_view_feed_page_item, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.feed_page_all_view_feed_page_item, parent, false);
 
         return new MyViewHolder(v);
     }

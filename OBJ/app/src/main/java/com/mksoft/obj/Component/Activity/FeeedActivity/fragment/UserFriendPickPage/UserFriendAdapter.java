@@ -1,12 +1,9 @@
-package com.mksoft.obj.Component.Activity.fragment.UserFriendPickPage;
+package com.mksoft.obj.Component.Activity.FeeedActivity.fragment.UserFriendPickPage;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.mksoft.obj.R;
@@ -42,7 +39,7 @@ public class UserFriendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.user_friend_pick_paget_item, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.feed_page_user_friend_pick_paget_item, parent, false);
 
         return new UserFriendAdapter.MyViewHolder(v);
     }

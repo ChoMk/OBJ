@@ -1,4 +1,4 @@
-package com.mksoft.obj.Component.Activity.fragment.OfferedImagePage;
+package com.mksoft.obj.Component.Activity.FeeedActivity.fragment.OfferedImagePage;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -11,8 +11,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.mksoft.obj.Component.Activity.FeeedActivity.FeedRootActivity;
 import com.mksoft.obj.Component.Activity.MainActivity;
-import com.mksoft.obj.Component.Activity.fragment.UserFriendPickPage.UserFriendPickPageFragment;
+import com.mksoft.obj.Component.Activity.FeeedActivity.fragment.UserFriendPickPage.UserFriendPickPageFragment;
 import com.mksoft.obj.R;
 import com.mksoft.obj.Repository.Data.OfferedImageData;
 
@@ -47,7 +48,7 @@ public class OfferedImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.offered_image_page_item, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.feed_page_offered_image_page_item, parent, false);
 
         return new OfferedImageAdapter.MyViewHolder(v);
     }
@@ -69,12 +70,12 @@ public class OfferedImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
                 userFriendPickPageFragment = new UserFriendPickPageFragment();
                 userFriendPickPageFragment.setArguments(bundle);
-                Toast toast = Toast.makeText(MainActivity.mainActivity.getApplicationContext(), items.get((position)).getImageName()+
-                        "을 선택하셨습니다.", Toast.LENGTH_LONG);
+                Toast toast = Toast.makeText(FeedRootActivity.feedRootActivity.getApplicationContext(), items.get((position)).getImageName()+
+                        "을 선택하셨습니다.", Toast.LENGTH_SHORT);
                 toast.setGravity(Gravity.CENTER, Gravity.CENTER, 0);
                 toast.show();
-                fragmentTransaction = MainActivity.mainActivity.getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.mainContainer, userFriendPickPageFragment,null);
+                fragmentTransaction = FeedRootActivity.feedRootActivity.getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.feedRootMainContainer, userFriendPickPageFragment,null);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
             }

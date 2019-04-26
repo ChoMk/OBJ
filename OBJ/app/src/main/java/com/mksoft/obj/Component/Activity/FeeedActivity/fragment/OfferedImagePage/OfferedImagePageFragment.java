@@ -1,4 +1,4 @@
-package com.mksoft.obj.Component.Activity.fragment.AllViewFeedPage;
+package com.mksoft.obj.Component.Activity.FeeedActivity.fragment.OfferedImagePage;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -6,46 +6,43 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.mksoft.obj.Component.Activity.FeeedActivity.FeedRootActivity;
 import com.mksoft.obj.Component.Activity.MainActivity;
-import com.mksoft.obj.Component.Activity.fragment.OfferedImagePage.OfferedImageAdapter;
-import com.mksoft.obj.Component.Activity.fragment.OfferedImagePage.OfferedImagePageFragment;
 import com.mksoft.obj.R;
 import com.mksoft.obj.Repository.APIRepo;
+import com.mksoft.obj.Repository.Data.OfferedImageData;
+
+import java.util.ArrayList;
 
 import javax.inject.Inject;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import dagger.android.support.AndroidSupportInjection;
 
-public class AllViewFeedPageFragment extends Fragment {
+public class OfferedImagePageFragment extends Fragment implements FeedRootActivity.onKeyBackPressedListener{
     RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
-    FeedAdapter feedAdapter;
+    OfferedImageAdapter offeredImageAdapter;
 
 
-    FloatingActionButton fab;
 
-    FragmentTransaction fragmentTransaction;
 
     @Inject
     APIRepo apiRepo;
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        ((MainActivity) context).setOnKeyBackPressedListener(null);
+        ((FeedRootActivity) context).setOnKeyBackPressedListener(null);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         //this.configureViewModel();
+
     }
 
 
@@ -62,52 +59,57 @@ public class AllViewFeedPageFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.all_view_feed_page_fragment, container, false);
+        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.feed_page_offered_image_page_fragment, container, false);
+
 
         init(rootView);
 
-        clickAddButton();
 
         hideKeyboard();
+
 
         return rootView;
     }
 
     private void init(ViewGroup rootView){
 
-        fab = (FloatingActionButton) rootView.findViewById(R.id.fab_main);
 
-        recyclerView = (RecyclerView)rootView.findViewById(R.id.feedRecyclerView);
+        recyclerView = (RecyclerView)rootView.findViewById(R.id.offeredImageRecyclerView);
         layoutManager = new LinearLayoutManager(rootView.getContext());
 
         initListView();
+
     }
 
     private void initListView(){
 
         recyclerView.setHasFixedSize(true);
-        feedAdapter = new FeedAdapter(getContext());
-        recyclerView.setAdapter(feedAdapter);
+        offeredImageAdapter = new OfferedImageAdapter(getContext());
+        recyclerView.setAdapter(offeredImageAdapter);
         recyclerView.setLayoutManager(layoutManager);
 
+        makeOfferedList();//어뎁터에 들어갈 이미지 초기화
+
     }
 
-    private void clickAddButton(){
-        if(fab == null)
-            return;
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                fragmentTransaction = getFragmentManager().beginTransaction();
-                MainActivity.mainActivity.getSupportFragmentManager().popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                fragmentTransaction.replace(R.id.mainContainer, new OfferedImagePageFragment(), null);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-            }
-        });
-    }
+
     private void hideKeyboard(){
-        MainActivity.mainActivity.getHideKeyboard().hideKeyboard();
+        FeedRootActivity.feedRootActivity.getHideKeyboard().hideKeyboard();
     }
 
+    private void makeOfferedList(){
+        ArrayList<OfferedImageData> offeredImageDataList = new ArrayList<>();
+
+        offeredImageDataList.add(new OfferedImageData(1, "test1", R.drawable.test1));
+        offeredImageDataList.add(new OfferedImageData(2, "test2", R.drawable.test2));
+
+
+
+        offeredImageAdapter.refreshItem(offeredImageDataList);
+    }//어뎁터에 들어갈 이미지 초기화
+    @Override
+    public void onBackKey() {
+        FeedRootActivity.feedRootActivity.setOnKeyBackPressedListener(null);
+        FeedRootActivity.feedRootActivity.onBackPressed();
+    }
 }

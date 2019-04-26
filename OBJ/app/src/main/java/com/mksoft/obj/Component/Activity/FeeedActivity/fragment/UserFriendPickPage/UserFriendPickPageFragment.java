@@ -1,4 +1,4 @@
-package com.mksoft.obj.Component.Activity.fragment.UserFriendPickPage;
+package com.mksoft.obj.Component.Activity.FeeedActivity.fragment.UserFriendPickPage;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -8,15 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
+import com.mksoft.obj.Component.Activity.FeeedActivity.FeedRootActivity;
 import com.mksoft.obj.Component.Activity.MainActivity;
-import com.mksoft.obj.Component.Activity.fragment.AllViewFeedPage.AllViewFeedPageFragment;
-import com.mksoft.obj.Component.Activity.fragment.OfferedImagePage.OfferedImageAdapter;
+import com.mksoft.obj.Component.Activity.FeeedActivity.fragment.AllViewFeedPage.AllViewFeedPageFragment;
 import com.mksoft.obj.R;
 import com.mksoft.obj.Repository.APIRepo;
 import com.mksoft.obj.Repository.Data.FriendData;
-import com.mksoft.obj.Repository.Data.OfferedImageData;
 
 import java.util.ArrayList;
 
@@ -31,7 +29,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import dagger.android.support.AndroidSupportInjection;
 
-public class UserFriendPickPageFragment extends Fragment {
+public class UserFriendPickPageFragment extends Fragment implements FeedRootActivity.onKeyBackPressedListener{
     RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
     UserFriendAdapter userFriendAdapter;
@@ -46,7 +44,7 @@ public class UserFriendPickPageFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        ((MainActivity) context).setOnKeyBackPressedListener(null);
+        ((FeedRootActivity) context).setOnKeyBackPressedListener(null);
     }
 
     @Override
@@ -69,7 +67,7 @@ public class UserFriendPickPageFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.user_friend_pick_page_fragment, container, false);
+        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.feed_page_user_friend_pick_page_fragment, container, false);
 
         init(rootView);
 
@@ -110,13 +108,13 @@ public class UserFriendPickPageFragment extends Fragment {
         });
     }
     private void hideKeyboard(){
-        MainActivity.mainActivity.getHideKeyboard().hideKeyboard();
+        FeedRootActivity.feedRootActivity.getHideKeyboard().hideKeyboard();
     }
     private void testMakeFriend(){
         ArrayList<FriendData> friendDataList = new ArrayList<>();
 
-        friendDataList.add(new FriendData(1, "규택"));
-        friendDataList.add(new FriendData(2, "동민"));
+        friendDataList.add(new FriendData("ID1", "규택"));
+        friendDataList.add(new FriendData("ID2", "동민"));
 
 
 
@@ -131,9 +129,9 @@ public class UserFriendPickPageFragment extends Fragment {
         builder.setPositiveButton("예",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        fragmentTransaction = MainActivity.mainActivity.getSupportFragmentManager().beginTransaction();
+                        fragmentTransaction = FeedRootActivity.feedRootActivity.getSupportFragmentManager().beginTransaction();
                         MainActivity.mainActivity.getSupportFragmentManager().popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                        fragmentTransaction.replace(R.id.mainContainer, new AllViewFeedPageFragment(), null);
+                        fragmentTransaction.replace(R.id.feedRootMainContainer, new AllViewFeedPageFragment(), null);
                         fragmentTransaction.commit();
                     }
                 });
@@ -145,5 +143,9 @@ public class UserFriendPickPageFragment extends Fragment {
                 });
         builder.show();
     }
-
+    @Override
+    public void onBackKey() {
+        FeedRootActivity.feedRootActivity.setOnKeyBackPressedListener(null);
+        FeedRootActivity.feedRootActivity.onBackPressed();
+    }
 }

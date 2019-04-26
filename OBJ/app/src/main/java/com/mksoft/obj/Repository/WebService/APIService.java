@@ -19,6 +19,12 @@ public interface APIService {
     Call<FriedListData> getUserFriends(
             @Path("userID") String userID);
 
+
+    @GET("/user/{userID}.json")
+    Call<UserData> checkUser(
+            @Path("userID") String userID
+    );
+
     @PUT("/user/{userID}.json")
     Call<Object> postUser(
             @Path("userID") String userID,

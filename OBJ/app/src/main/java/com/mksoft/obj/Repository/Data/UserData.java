@@ -3,14 +3,14 @@ package com.mksoft.obj.Repository.Data;
 import java.util.ArrayList;
 
 public class UserData {
-    private int id = 0;
+    private String id;
     private String name;
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
