@@ -26,10 +26,9 @@ public class FeedRootActivity extends AppCompatActivity implements HasSupportFra
     AllViewFeedPageFragment allViewFeedPageFragment;
 
     HideKeyboard hideKeyboard;
-    SharedPreferences pref;
 
 
-
+    String access_ID;
     @Inject
     DispatchingAndroidInjector<Fragment> dispatchingAndroidInjector;
 
@@ -38,6 +37,8 @@ public class FeedRootActivity extends AppCompatActivity implements HasSupportFra
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.feed_page_feed_root_activity);
         feedRootActivity = this;
@@ -58,8 +59,8 @@ public class FeedRootActivity extends AppCompatActivity implements HasSupportFra
         allViewFeedPageFragment = new AllViewFeedPageFragment();
         backPressCloseHandler = new BackPressCloseHandler(this);
         getSupportFragmentManager().beginTransaction().replace(R.id.feedRootMainContainer, allViewFeedPageFragment).commit();
-
-
+        Bundle bundle = getIntent().getBundleExtra("BUNDLE");
+        access_ID = bundle.getString("access_ID");
     }
 
 
@@ -91,4 +92,9 @@ public class FeedRootActivity extends AppCompatActivity implements HasSupportFra
             }
         }
     }
+
+    public String getAccess_ID() {
+        return access_ID;
+    }
+
 }

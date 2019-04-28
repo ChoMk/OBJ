@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         this.configureDagger();
@@ -71,7 +72,10 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     private void startPageSelect(){
         Intent intent;
         if(access_ID != null && access_ID != ""){
+            Bundle bundle = new Bundle();
+            bundle.putString("access_ID", access_ID);
             intent = new Intent(this, FeedRootActivity.class);
+            intent.putExtra("BUNDLE", bundle);
 
         }else{
             intent = new Intent(this, LoginRootActivity.class);

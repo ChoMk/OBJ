@@ -29,6 +29,7 @@ public class LoginRootActivity extends AppCompatActivity implements HasSupportFr
     DispatchingAndroidInjector<Fragment> dispatchingAndroidInjector;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_page_login_root_activity);
         loginRootActivity = this;
@@ -45,6 +46,7 @@ public class LoginRootActivity extends AppCompatActivity implements HasSupportFr
     }
 
     private void init(){
+
         hideKeyboard = new HideKeyboard(this);
         mainContainer = findViewById(R.id.loginRootmainContainer);
         backPressCloseHandler = new BackPressCloseHandler(this);

@@ -120,7 +120,7 @@ public class JoinPageFragment extends Fragment implements LoginRootActivity.onKe
                 &&joinpageNameText.getText().toString().length() != 0){
 
                     UserData userData = new UserData();
-                    userData.setUserName(joinpageNameText.getText().toString());
+                    userData.setName(joinpageNameText.getText().toString());
                     userData.setId(joinPageIDEditText.getText().toString());
                     apiRepo.postUser(joinPageIDEditText.getText().toString(), userData, joinPageFragment);
 
