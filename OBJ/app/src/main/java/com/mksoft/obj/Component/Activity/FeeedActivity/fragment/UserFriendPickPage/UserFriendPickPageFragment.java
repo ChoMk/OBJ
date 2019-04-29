@@ -130,7 +130,7 @@ public class UserFriendPickPageFragment extends Fragment implements FeedRootActi
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         fragmentTransaction = FeedRootActivity.feedRootActivity.getSupportFragmentManager().beginTransaction();
-                        MainActivity.mainActivity.getSupportFragmentManager().popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                        FeedRootActivity.feedRootActivity.getSupportFragmentManager().popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                         fragmentTransaction.replace(R.id.feedRootMainContainer, new AllViewFeedPageFragment(), null);
                         fragmentTransaction.commit();
                     }
