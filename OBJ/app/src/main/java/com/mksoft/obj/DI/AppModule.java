@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mksoft.obj.Repository.APIRepo;
 import com.mksoft.obj.Repository.DB.AppDB;
+import com.mksoft.obj.Repository.DB.FriendDataDao;
 import com.mksoft.obj.Repository.DB.UserDataDao;
 import com.mksoft.obj.Repository.WebService.APIService;
 
@@ -38,6 +39,10 @@ public class AppModule {
     @Provides
     @Singleton
     UserDataDao provideUserDao(AppDB database) { return database.userDao(); }
+
+    @Provides
+    @Singleton
+    FriendDataDao provideFriendDao(AppDB database) { return database.friendDao(); }
 
 
 
@@ -74,8 +79,8 @@ public class AppModule {
 
     @Provides
     @Singleton
-    APIRepo provideAPIRepository(APIService webservice, UserDataDao userDataDao, Executor executor) {
-        return new APIRepo(webservice, userDataDao, executor);
+    APIRepo provideAPIRepository(APIService webservice, UserDataDao userDataDao, FriendDataDao friendDataDao, Executor executor) {
+        return new APIRepo(webservice, userDataDao, friendDataDao, executor);
     }
 
 

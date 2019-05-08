@@ -11,6 +11,11 @@ import com.mksoft.obj.R;
 import com.mksoft.obj.Repository.APIRepo;
 import com.mksoft.obj.Repository.Data.FriendData;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
 import javax.inject.Inject;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -61,6 +66,7 @@ public class FeedRootActivity extends AppCompatActivity implements HasSupportFra
         getSupportFragmentManager().beginTransaction().replace(R.id.feedRootMainContainer, allViewFeedPageFragment).commit();
         Bundle bundle = getIntent().getBundleExtra("BUNDLE");
         access_ID = bundle.getString("access_ID");
+        //testMakeFriend();
     }
 
 
@@ -96,5 +102,16 @@ public class FeedRootActivity extends AppCompatActivity implements HasSupportFra
     public String getAccess_ID() {
         return access_ID;
     }
-
+    public void testMakeFriend(){
+        List<FriendData> tempList = new ArrayList<FriendData>();
+        FriendData friendData1 = new FriendData();
+        FriendData friendData2 = new FriendData();
+        friendData1.setName("동민");
+        friendData1.setId("ehdals");
+        friendData2.setName("규택");
+        friendData2.setId("rbxor");
+        tempList.add(friendData1);
+        tempList.add(friendData2);
+        apiRepo.postFriend(access_ID, tempList);
+    }
 }

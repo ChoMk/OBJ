@@ -142,7 +142,7 @@ public class AllViewFeedPageFragment extends Fragment {
             }else{
                 Glide.with(this).load(user.getUserImgUrl()).apply(RequestOptions.circleCropTransform()).into(userImag);
             }
-            this.userName.setText(user.getName()+"님을 위한 feed");
+            this.userName.setText(user.getName());
 
         }
     }

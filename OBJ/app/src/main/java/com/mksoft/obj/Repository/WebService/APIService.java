@@ -1,8 +1,10 @@
 package com.mksoft.obj.Repository.WebService;
 
-import com.mksoft.obj.Repository.Data.FriedListData;
 import com.mksoft.obj.Repository.Data.FriendData;
+import com.mksoft.obj.Repository.Data.FriendListData;
 import com.mksoft.obj.Repository.Data.UserData;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -16,7 +18,7 @@ public interface APIService {
             @Path("userID") String userID);
 
     @GET("/friend/{userID}.json")
-    Call<FriedListData> getUserFriends(
+    Call<List<FriendData>> getUserFriends(
             @Path("userID") String userID);
 
 
@@ -31,5 +33,9 @@ public interface APIService {
             @Body UserData userData
     );
 
-
+    @PUT("/friend/{userID}.json")
+    Call<Object> postFriend(
+            @Path("userID") String userID,
+            @Body List<FriendData> friendData
+    );
 }

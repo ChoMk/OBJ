@@ -15,8 +15,10 @@ import com.mksoft.obj.Component.Activity.FeeedActivity.fragment.AllViewFeedPage.
 import com.mksoft.obj.R;
 import com.mksoft.obj.Repository.APIRepo;
 import com.mksoft.obj.Repository.Data.FriendData;
+import com.mksoft.obj.ViewModel.UserProfileViewModel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -25,6 +27,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import dagger.android.support.AndroidSupportInjection;
@@ -35,11 +39,14 @@ public class UserFriendPickPageFragment extends Fragment implements FeedRootActi
     UserFriendAdapter userFriendAdapter;
     FragmentTransaction fragmentTransaction;
     String selectedOfferedImageName;
+    private UserProfileViewModel viewModel;
+
 
     Button submitButton;
     @Inject
     APIRepo apiRepo;
-
+    @Inject
+    ViewModelProvider.Factory viewModelFactory;
     AlertDialog dialog;
     @Override
     public void onAttach(Context context) {
@@ -50,19 +57,24 @@ public class UserFriendPickPageFragment extends Fragment implements FeedRootActi
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        //this.configureViewModel();
+        this.configureDagger();
+        this.configureViewModel();
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.configureDagger();
 
     }
     private void configureDagger(){
         AndroidSupportInjection.inject(this);
     }
+    private void configureViewModel(){
 
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(UserProfileViewModel.class);
+        viewModel.init(FeedRootActivity.feedRootActivity.getAccess_ID());
+        viewModel.getFriendListLiveData().observe(this, friendData -> refreshFriendList(friendData));
+    }
     @Override
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container,
@@ -86,7 +98,6 @@ public class UserFriendPickPageFragment extends Fragment implements FeedRootActi
         layoutManager = new LinearLayoutManager(rootView.getContext());
         submitButton = rootView.findViewById(R.id.submitButton);
         initListView();
-        testMakeFriend();
     }
 
     private void initListView(){
@@ -110,16 +121,7 @@ public class UserFriendPickPageFragment extends Fragment implements FeedRootActi
     private void hideKeyboard(){
         FeedRootActivity.feedRootActivity.getHideKeyboard().hideKeyboard();
     }
-    private void testMakeFriend(){
-        ArrayList<FriendData> friendDataList = new ArrayList<>();
 
-        friendDataList.add(new FriendData("ID1", "규택"));
-        friendDataList.add(new FriendData("ID2", "동민"));
-
-
-
-        userFriendAdapter.refreshItem(friendDataList);
-    }
     private void dialogShow()
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -147,5 +149,9 @@ public class UserFriendPickPageFragment extends Fragment implements FeedRootActi
     public void onBackKey() {
         FeedRootActivity.feedRootActivity.setOnKeyBackPressedListener(null);
         FeedRootActivity.feedRootActivity.onBackPressed();
+    }
+    public void refreshFriendList(List<FriendData> friendData){
+        Log.d("hi", "hi");
+        userFriendAdapter.refreshItem(friendData);
     }
 }

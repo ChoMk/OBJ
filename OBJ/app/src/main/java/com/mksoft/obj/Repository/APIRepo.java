@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,7 +16,10 @@ import com.mksoft.obj.Component.Activity.LoginActivity.Fragment.JoinPageFragment
 import com.mksoft.obj.Component.Activity.LoginActivity.LoginRootActivity;
 import com.mksoft.obj.Component.Activity.MainActivity;
 import com.mksoft.obj.Component.App;
+import com.mksoft.obj.Repository.DB.FriendDataDao;
 import com.mksoft.obj.Repository.DB.UserDataDao;
+import com.mksoft.obj.Repository.Data.FriendData;
+import com.mksoft.obj.Repository.Data.FriendListData;
 import com.mksoft.obj.Repository.Data.UserData;
 import com.mksoft.obj.Repository.WebService.APIService;
 
@@ -23,6 +27,7 @@ import com.mksoft.obj.Repository.WebService.APIService;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
@@ -40,10 +45,14 @@ public class APIRepo {
     private final APIService webservice;
     private final UserDataDao userDao;
     private final Executor executor;
+    private final FriendDataDao friendDataDao;
 
     @Inject
-    public APIRepo(APIService webservice, UserDataDao userDao, Executor executor) {
+    public APIRepo(APIService webservice, UserDataDao userDao,
+                   FriendDataDao friendDataDao,
+                   Executor executor) {
         Log.d("testResultRepo", "make it!!!");
+        this.friendDataDao = friendDataDao;
         this.webservice = webservice;
         this.userDao = userDao;
         this.executor = executor;
@@ -93,6 +102,20 @@ public class APIRepo {
         });
 
     }
+    public void postFriend(String userID, List<FriendData> friendData){
+        Call<Object>call = webservice.postFriend(userID, friendData);
+        call.enqueue(new Callback<Object>() {
+
+            @Override
+            public void onResponse(Call<Object> call, Response<Object> response) {
+            }
+
+            @Override
+            public void onFailure(Call<Object> call, Throwable t) {
+            }
+        });
+
+    }
     public void getUserInfo(final String userID, final LoginRootActivity loginRootActivity){
         Call<UserData>call =webservice.getUser(userID);
         call.enqueue(new Callback<UserData>() {
@@ -105,7 +128,11 @@ public class APIRepo {
                     SharedPreferences.Editor editor = pref.edit();
                     editor.putString("access_ID", response.body().getId());
                     editor.commit();
+
                     Intent intent = new Intent(loginRootActivity, FeedRootActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("access_ID", response.body().getId());
+                    intent.putExtra("BUNDLE", bundle);
                     loginRootActivity.startActivity(intent);
 
 
@@ -121,6 +148,52 @@ public class APIRepo {
         });
     }
 
+
+    public LiveData<List<FriendData>> getFriendListLiveData(String userLogin){
+        refreshFriendList(userLogin);
+        return friendDataDao.getFriendListLiveData();
+    }
+    private void refreshFriendList(final String userLogin){
+        executor.execute(() -> {
+            // Check if user was fetched recently
+            boolean friendListDataExists = (friendDataDao.getFriendListData(getMaxRefreshTime(new Date())) != null);
+            //최대 1분전에 룸에 유절르 저장했으면 그거 그냥 리턴 그게 아니면 서버에서 받아와서 룸을 초기화 시켜주고
+
+            // If user have to be updated
+            if (!friendListDataExists) {//확인
+                Log.d("testtarace","request");
+                webservice.getUserFriends(userLogin).enqueue(new Callback<List<FriendData>>() {
+                    @Override
+                    public void onResponse(Call<List<FriendData>> call, Response<List<FriendData>> response) {
+                        Log.e("TAG", "DATA REFRESHED FROM NETWORK");
+                        //Toast.makeText(App.context, "Data refreshed from network !", Toast.LENGTH_LONG).show();
+                        if(response.body() == null){
+                            Log.d("test1905", "null");
+
+                        }else{
+                            Log.d("test1905", String.valueOf(response.body().size()));
+                        }
+                        executor.execute(() -> {
+                            List<FriendData> friendDataList = response.body();
+                            for(int i =0; i<friendDataList.size(); i++){
+                                Log.d("test190508", friendDataList.get(i).getName());
+                                friendDataList.get(i).setLastRefresh(new Date());
+                                friendDataDao.save(friendDataList.get(i));
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<FriendData>> call, Throwable t) {
+                        Log.d("test190508",t.toString());
+                    }
+                });
+            }else{
+                Log.d("testtarace","no request");
+
+            }
+        });
+    }
     public LiveData<UserData> getUserLiveData(String userLogin) {
         refreshUser(userLogin); // try to refresh data if possible from Github Api
         return userDao.getUserLiveData(); // return a LiveData directly from the database.

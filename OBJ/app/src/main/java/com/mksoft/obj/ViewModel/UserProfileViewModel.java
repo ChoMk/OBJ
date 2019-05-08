@@ -2,7 +2,10 @@ package com.mksoft.obj.ViewModel;
 
 
 import com.mksoft.obj.Repository.APIRepo;
+import com.mksoft.obj.Repository.Data.FriendData;
 import com.mksoft.obj.Repository.Data.UserData;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -16,6 +19,8 @@ import androidx.lifecycle.ViewModel;
 public class UserProfileViewModel extends ViewModel {
 
     private LiveData<UserData> user;
+    private LiveData<List<FriendData>> friendList;
+
     private APIRepo apiRepo;
 
     @Inject
@@ -27,15 +32,16 @@ public class UserProfileViewModel extends ViewModel {
     // ----
 
     public void init(String userId) {
-        if (this.user != null) {
+        if (this.user != null && this.friendList != null) {
             return;
         }
         user = apiRepo.getUserLiveData(userId);
+        friendList = apiRepo.getFriendListLiveData(userId);
     }
 
     public LiveData<UserData> getUserLiveData() {
         return this.user;
     }
-
+    public LiveData<List<FriendData>> getFriendListLiveData(){return this.friendList;}
 
 }
