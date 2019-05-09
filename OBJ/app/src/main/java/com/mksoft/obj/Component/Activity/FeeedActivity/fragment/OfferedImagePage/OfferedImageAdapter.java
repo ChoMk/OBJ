@@ -36,12 +36,12 @@ public class OfferedImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
     List<OfferedImageData> items =  Collections.emptyList();
     Context context;
-
+    OfferedImagePageFragment offeredImagePageFragment;
     OfferedImageAdapter.MyViewHolder myViewHolder;
 
-    public OfferedImageAdapter(Context context){
+    public OfferedImageAdapter(Context context, OfferedImagePageFragment offeredImagePageFragment){
         this.context = context;
-
+        this.offeredImagePageFragment = offeredImagePageFragment;
     }
 
 
@@ -65,9 +65,10 @@ public class OfferedImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 bundle = new Bundle();
                 bundle.putString("imageName", items.get(position).getImageName());
-
+                bundle.putString("userName", offeredImagePageFragment.getUserName());
                 userFriendPickPageFragment = new UserFriendPickPageFragment();
                 userFriendPickPageFragment.setArguments(bundle);
                 Toast toast = Toast.makeText(FeedRootActivity.feedRootActivity.getApplicationContext(), items.get((position)).getImageName()+

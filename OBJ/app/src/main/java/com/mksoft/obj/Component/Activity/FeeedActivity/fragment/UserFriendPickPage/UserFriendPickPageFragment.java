@@ -8,12 +8,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.mksoft.obj.Component.Activity.FeeedActivity.FeedRootActivity;
 import com.mksoft.obj.Component.Activity.MainActivity;
 import com.mksoft.obj.Component.Activity.FeeedActivity.fragment.AllViewFeedPage.AllViewFeedPageFragment;
 import com.mksoft.obj.R;
 import com.mksoft.obj.Repository.APIRepo;
+import com.mksoft.obj.Repository.Data.FeedRequestData;
 import com.mksoft.obj.Repository.Data.FriendData;
 import com.mksoft.obj.ViewModel.UserProfileViewModel;
 
@@ -40,7 +42,7 @@ public class UserFriendPickPageFragment extends Fragment implements FeedRootActi
     FragmentTransaction fragmentTransaction;
     String selectedOfferedImageName;
     private UserProfileViewModel viewModel;
-
+    UserFriendPickPageFragment userFriendPickPageFragment;
 
     Button submitButton;
     @Inject
@@ -48,6 +50,7 @@ public class UserFriendPickPageFragment extends Fragment implements FeedRootActi
     @Inject
     ViewModelProvider.Factory viewModelFactory;
     AlertDialog dialog;
+    String userName;
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -91,8 +94,9 @@ public class UserFriendPickPageFragment extends Fragment implements FeedRootActi
     }
 
     private void init(ViewGroup rootView){
-
+        userFriendPickPageFragment = this;
         selectedOfferedImageName = getArguments().getString("imageName");
+        userName =  getArguments().getString("userName");
         Log.d("argu", selectedOfferedImageName);
         recyclerView = (RecyclerView)rootView.findViewById(R.id.userFriendRecyclerView);
         layoutManager = new LinearLayoutManager(rootView.getContext());
@@ -114,7 +118,12 @@ public class UserFriendPickPageFragment extends Fragment implements FeedRootActi
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialogShow();
+                if(userFriendAdapter.getLastSelectedPosition() != -1){
+                    dialogShow();
+                }else{
+                    Toast.makeText(getContext(), "친구를 선택하세요.", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
     }
@@ -131,10 +140,11 @@ public class UserFriendPickPageFragment extends Fragment implements FeedRootActi
         builder.setPositiveButton("예",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        fragmentTransaction = FeedRootActivity.feedRootActivity.getSupportFragmentManager().beginTransaction();
-                        FeedRootActivity.feedRootActivity.getSupportFragmentManager().popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                        fragmentTransaction.replace(R.id.feedRootMainContainer, new AllViewFeedPageFragment(), null);
-                        fragmentTransaction.commit();
+                        FeedRequestData feedRequestData = new FeedRequestData();
+                        feedRequestData.setPickImage(selectedOfferedImageName);
+                        feedRequestData.setUser1(userName);
+                        feedRequestData.setUser2(userFriendAdapter.getItem(userFriendAdapter.getLastSelectedPosition()).getName());
+                        apiRepo.postMakeFeedRequest(feedRequestData, userFriendPickPageFragment);
                     }
                 });
         builder.setNegativeButton("아니오",
@@ -153,5 +163,11 @@ public class UserFriendPickPageFragment extends Fragment implements FeedRootActi
     public void refreshFriendList(List<FriendData> friendData){
         Log.d("hi", "hi");
         userFriendAdapter.refreshItem(friendData);
+    }
+    public void replaceFromPickPageToFeedPage(){
+        fragmentTransaction = FeedRootActivity.feedRootActivity.getSupportFragmentManager().beginTransaction();
+        FeedRootActivity.feedRootActivity.getSupportFragmentManager().popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        fragmentTransaction.replace(R.id.feedRootMainContainer, new AllViewFeedPageFragment(), null);
+        fragmentTransaction.commit();
     }
 }

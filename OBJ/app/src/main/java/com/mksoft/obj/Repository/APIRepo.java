@@ -12,19 +12,18 @@ import android.widget.Toast;
 
 
 import com.mksoft.obj.Component.Activity.FeeedActivity.FeedRootActivity;
+import com.mksoft.obj.Component.Activity.FeeedActivity.fragment.UserFriendPickPage.UserFriendPickPageFragment;
 import com.mksoft.obj.Component.Activity.LoginActivity.Fragment.JoinPageFragment;
 import com.mksoft.obj.Component.Activity.LoginActivity.LoginRootActivity;
 import com.mksoft.obj.Component.Activity.MainActivity;
-import com.mksoft.obj.Component.App;
 import com.mksoft.obj.Repository.DB.FriendDataDao;
 import com.mksoft.obj.Repository.DB.UserDataDao;
+import com.mksoft.obj.Repository.Data.FeedRequestData;
 import com.mksoft.obj.Repository.Data.FriendData;
-import com.mksoft.obj.Repository.Data.FriendListData;
 import com.mksoft.obj.Repository.Data.UserData;
 import com.mksoft.obj.Repository.WebService.APIService;
 
 
-import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -40,7 +39,7 @@ import retrofit2.Response;
 
 @Singleton
 public class APIRepo {
-    private static int FRESH_TIMEOUT_IN_MINUTES = 1;
+    private static int FRESH_TIMEOUT_IN_MINUTES = 8;
 
     private final APIService webservice;
     private final UserDataDao userDao;
@@ -80,6 +79,22 @@ public class APIRepo {
             @Override
             public void onFailure(Call<UserData> call, Throwable t) {
                 Log.d("Login fail log", t.toString());
+            }
+        });
+    }
+    public void postMakeFeedRequest(FeedRequestData feedRequestData, final UserFriendPickPageFragment userFriendPickPageFragment){
+        Call<Object>call = webservice.postMakeFeedRequest(feedRequestData.getPickImage()
+                +feedRequestData.getUser1()+feedRequestData.getUser2(), feedRequestData);
+        Log.d("dkdkdkdkefek", feedRequestData.getPickImage()+feedRequestData.getUser1()+feedRequestData.getUser2());
+        call.enqueue(new Callback<Object>() {
+            @Override
+            public void onResponse(Call<Object> call, Response<Object> response) {
+                userFriendPickPageFragment.replaceFromPickPageToFeedPage();
+            }
+
+            @Override
+            public void onFailure(Call<Object> call, Throwable t) {
+                Log.d("requestfeederro", t.toString());
             }
         });
     }
@@ -167,19 +182,16 @@ public class APIRepo {
                     public void onResponse(Call<List<FriendData>> call, Response<List<FriendData>> response) {
                         Log.e("TAG", "DATA REFRESHED FROM NETWORK");
                         //Toast.makeText(App.context, "Data refreshed from network !", Toast.LENGTH_LONG).show();
-                        if(response.body() == null){
-                            Log.d("test1905", "null");
 
-                        }else{
-                            Log.d("test1905", String.valueOf(response.body().size()));
-                        }
                         executor.execute(() -> {
                             List<FriendData> friendDataList = response.body();
                             for(int i =0; i<friendDataList.size(); i++){
                                 Log.d("test190508", friendDataList.get(i).getName());
                                 friendDataList.get(i).setLastRefresh(new Date());
-                                friendDataDao.save(friendDataList.get(i));
+
                             }
+                            friendDataDao.deleteAll();
+                            friendDataDao.saveList(friendDataList);
                         });
                     }
 
@@ -224,13 +236,28 @@ public class APIRepo {
                     public void onFailure(Call<UserData> call, Throwable t) { }
                 });
             }
+            webservice.getUser(userLogin).enqueue(new Callback<UserData>() {
+                @Override
+                public void onResponse(Call<UserData> call, Response<UserData> response) {
+                    Log.e("TAG", "DATA REFRESHED FROM NETWORK");
+                    //Toast.makeText(App.context, "Data refreshed from network !", Toast.LENGTH_LONG).show();
+                    executor.execute(() -> {
+                        UserData user = response.body();
+                        user.setLastRefresh(new Date());
+                        userDao.save(user);
+                    });
+                }
+
+                @Override
+                public void onFailure(Call<UserData> call, Throwable t) { }
+            });
         });
     }//유저 값을 넘겨주는 것이 아니라 데이터베이스에 유저를 저장하고 디비(room)에 저장하기 위하여 쓰래드 사용....
 
     private Date getMaxRefreshTime(Date currentDate){
         Calendar cal = Calendar.getInstance();
         cal.setTime(currentDate);
-        cal.add(Calendar.MINUTE, -FRESH_TIMEOUT_IN_MINUTES);//현제 시간에서 FRESH_TIMEOUT_IN_MINUTES(1분) 전 시간을 불러온다.
+        cal.add(Calendar.SECOND, -FRESH_TIMEOUT_IN_MINUTES);//현제 시간에서 FRESH_TIMEOUT_IN_MINUTES() 전 시간을 불러온다.
         return cal.getTime();
     }
 

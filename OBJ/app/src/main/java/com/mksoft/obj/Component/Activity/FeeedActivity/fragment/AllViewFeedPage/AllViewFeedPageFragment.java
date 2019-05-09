@@ -50,6 +50,7 @@ public class AllViewFeedPageFragment extends Fragment {
 
     ImageView userImag;
     TextView userName;
+    String userNameS;
     @Inject
     APIRepo apiRepo;
 
@@ -124,9 +125,13 @@ public class AllViewFeedPageFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putString("userName", userNameS);
+                OfferedImagePageFragment offeredImagePageFragment = new OfferedImagePageFragment();
+                offeredImagePageFragment.setArguments(bundle);
                 fragmentTransaction = getFragmentManager().beginTransaction();
                 FeedRootActivity.feedRootActivity.getSupportFragmentManager().popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                fragmentTransaction.replace(R.id.feedRootMainContainer, new OfferedImagePageFragment(), null);
+                fragmentTransaction.replace(R.id.feedRootMainContainer, offeredImagePageFragment, null);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
             }
@@ -143,7 +148,9 @@ public class AllViewFeedPageFragment extends Fragment {
                 Glide.with(this).load(user.getUserImgUrl()).apply(RequestOptions.circleCropTransform()).into(userImag);
             }
             this.userName.setText(user.getName());
+            userNameS = user.getName();
 
         }
     }
+
 }

@@ -1,7 +1,7 @@
 package com.mksoft.obj.Repository.WebService;
 
+import com.mksoft.obj.Repository.Data.FeedRequestData;
 import com.mksoft.obj.Repository.Data.FriendData;
-import com.mksoft.obj.Repository.Data.FriendListData;
 import com.mksoft.obj.Repository.Data.UserData;
 
 import java.util.List;
@@ -9,6 +9,7 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
@@ -32,6 +33,11 @@ public interface APIService {
             @Path("userID") String userID,
             @Body UserData userData
     );
+    @PUT("/make_feed_request/{feedID}.json")
+    Call<Object> postMakeFeedRequest(
+            @Path("feedID") String feedID,
+            @Body FeedRequestData feedRequestData
+            );
 
     @PUT("/friend/{userID}.json")
     Call<Object> postFriend(

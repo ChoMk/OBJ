@@ -27,7 +27,8 @@ public class OfferedImagePageFragment extends Fragment implements FeedRootActivi
     RecyclerView.LayoutManager layoutManager;
     OfferedImageAdapter offeredImageAdapter;
 
-
+    String userName;
+    OfferedImagePageFragment offeredImagePageFragment;
 
 
     @Inject
@@ -72,8 +73,8 @@ public class OfferedImagePageFragment extends Fragment implements FeedRootActivi
     }
 
     private void init(ViewGroup rootView){
-
-
+        offeredImagePageFragment = this;
+        userName = getArguments().getString("userName");
         recyclerView = (RecyclerView)rootView.findViewById(R.id.offeredImageRecyclerView);
         layoutManager = new LinearLayoutManager(rootView.getContext());
 
@@ -84,7 +85,7 @@ public class OfferedImagePageFragment extends Fragment implements FeedRootActivi
     private void initListView(){
 
         recyclerView.setHasFixedSize(true);
-        offeredImageAdapter = new OfferedImageAdapter(getContext());
+        offeredImageAdapter = new OfferedImageAdapter(getContext(), offeredImagePageFragment);
         recyclerView.setAdapter(offeredImageAdapter);
         recyclerView.setLayoutManager(layoutManager);
 
@@ -111,5 +112,8 @@ public class OfferedImagePageFragment extends Fragment implements FeedRootActivi
     public void onBackKey() {
         FeedRootActivity.feedRootActivity.setOnKeyBackPressedListener(null);
         FeedRootActivity.feedRootActivity.onBackPressed();
+    }
+    public String getUserName(){
+        return userName;
     }
 }
