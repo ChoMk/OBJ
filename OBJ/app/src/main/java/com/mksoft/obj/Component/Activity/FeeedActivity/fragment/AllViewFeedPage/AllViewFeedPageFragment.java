@@ -5,6 +5,9 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -15,6 +18,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mksoft.obj.Component.Activity.FeeedActivity.FeedRootActivity;
+import com.mksoft.obj.Component.Activity.FeeedActivity.fragment.ReceiveFriendPage.ReceiveFriendPageFragment;
+import com.mksoft.obj.Component.Activity.FeeedActivity.fragment.RequestFriendPage.RequestFriendPageFragment;
 import com.mksoft.obj.Component.Activity.MainActivity;
 import com.mksoft.obj.Component.Activity.FeeedActivity.fragment.OfferedImagePage.OfferedImagePageFragment;
 import com.mksoft.obj.R;
@@ -66,8 +71,6 @@ public class AllViewFeedPageFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        this.configureDagger();
         this.configureViewModel();
     }
     private void configureViewModel(){
@@ -83,7 +86,8 @@ public class AllViewFeedPageFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        this.configureDagger();
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -98,7 +102,32 @@ public class AllViewFeedPageFragment extends Fragment {
         hideKeyboard();
         return rootView;
     }
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu, menu);
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.requestFriend:
+                fragmentTransaction = FeedRootActivity.feedRootActivity.getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.feedRootMainContainer, new RequestFriendPageFragment(),null);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+                return true;
 
+            case R.id.receiveFriend:
+                fragmentTransaction = FeedRootActivity.feedRootActivity.getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.feedRootMainContainer, new ReceiveFriendPageFragment(),null);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
     private void init(ViewGroup rootView){
 
         fab = rootView.findViewById(R.id.fab_main);
