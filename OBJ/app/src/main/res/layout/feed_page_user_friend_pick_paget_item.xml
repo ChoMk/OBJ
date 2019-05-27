@@ -5,19 +5,26 @@
     android:layout_height="wrap_content">
 
     <LinearLayout
+        android:layout_marginTop="20dp"
         android:id="@+id/ItemViewLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:orientation="horizontal">
+        <ImageView
+            android:id="@+id/friendIMG"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginRight="10dp"
+            />
+
         <TextView
             android:id="@+id/pickFriend"
-            android:layout_margin="13dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="25dp"
-            android:text="friend name"
-            android:textStyle="bold"/>
-
+            android:gravity="center"
+            android:text=""
+            android:textSize="30dp"
+            android:layout_marginLeft="10dp"/>
     </LinearLayout>
 
 

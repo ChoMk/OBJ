@@ -18,9 +18,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mksoft.obj.Component.Activity.FeeedActivity.FeedRootActivity;
-import com.mksoft.obj.Component.Activity.FeeedActivity.fragment.ReceiveFriendPage.ReceiveFriendPageFragment;
-import com.mksoft.obj.Component.Activity.FeeedActivity.fragment.RequestFriendPage.RequestFriendPageFragment;
-import com.mksoft.obj.Component.Activity.MainActivity;
 import com.mksoft.obj.Component.Activity.FeeedActivity.fragment.OfferedImagePage.OfferedImagePageFragment;
 import com.mksoft.obj.R;
 import com.mksoft.obj.Repository.APIRepo;
@@ -107,27 +104,7 @@ public class AllViewFeedPageFragment extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu, menu);
     }
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.requestFriend:
-                fragmentTransaction = FeedRootActivity.feedRootActivity.getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.feedRootMainContainer, new RequestFriendPageFragment(),null);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-                return true;
 
-            case R.id.receiveFriend:
-                fragmentTransaction = FeedRootActivity.feedRootActivity.getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.feedRootMainContainer, new ReceiveFriendPageFragment(),null);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-                return true;
-
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
     private void init(ViewGroup rootView){
 
         fab = rootView.findViewById(R.id.fab_main);
@@ -171,9 +148,11 @@ public class AllViewFeedPageFragment extends Fragment {
     }
     private void updateUI(@Nullable UserData user){
         if (user != null){
+
             if(user.getUserImgUrl() == null||user.getUserImgUrl().length() == 0){
                 Glide.with(this).load(R.drawable.userbaseimg).apply(RequestOptions.circleCropTransform()).into(userImag);
             }else{
+
                 Glide.with(this).load(user.getUserImgUrl()).apply(RequestOptions.circleCropTransform()).into(userImag);
             }
             this.userName.setText(user.getName());

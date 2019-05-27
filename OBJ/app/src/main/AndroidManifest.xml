@@ -23,11 +23,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".Component.Activity.MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".Component.Activity.LoginActivity.LoginRootActivity"
             android:parentActivityName=".Component.Activity.MainActivity">

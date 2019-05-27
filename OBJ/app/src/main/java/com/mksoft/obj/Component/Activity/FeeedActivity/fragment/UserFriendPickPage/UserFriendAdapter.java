@@ -4,8 +4,11 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.mksoft.obj.R;
 import com.mksoft.obj.Repository.Data.FriendData;
 
@@ -19,10 +22,11 @@ public class UserFriendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         TextView friendName;
-
+        ImageView friendIMG;
         MyViewHolder(View view){
             super(view);
             friendName = view.findViewById(R.id.pickFriend);
+            friendIMG = view.findViewById(R.id.friendIMG);
         }
     }
     List<FriendData> items =  Collections.emptyList();
@@ -50,6 +54,14 @@ public class UserFriendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
         myViewHolder = (UserFriendAdapter.MyViewHolder) holder;
         myViewHolder.friendName.setText(items.get(position).getName());
+
+        if(items.get(position).getFriendImgUrl() == null||items.get(position).getFriendImgUrl().length() == 0){
+            Glide.with(context).load(R.drawable.userbaseimg).apply(RequestOptions.circleCropTransform()).into(myViewHolder.friendIMG);
+        }else{
+            Glide.with(context).load(items.get(position).getFriendImgUrl()).apply(RequestOptions.circleCropTransform()).into(myViewHolder.friendIMG);
+        }
+
+
 
         myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
