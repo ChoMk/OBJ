@@ -1,5 +1,6 @@
 package com.mksoft.obj.Repository.WebService;
 
+import com.mksoft.obj.Repository.Data.FeedData;
 import com.mksoft.obj.Repository.Data.FeedRequestData;
 import com.mksoft.obj.Repository.Data.FriendData;
 import com.mksoft.obj.Repository.Data.UserData;
@@ -21,12 +22,15 @@ public interface APIService {
     @GET("/friend/{userID}.json")
     Call<List<FriendData>> getUserFriends(
             @Path("userID") String userID);
+    @GET("/feed.json")
+    Call<List<FeedData>> getFeedData();
 
 
     @GET("/user/{userID}.json")
     Call<UserData> checkUser(
             @Path("userID") String userID
     );
+
 
     @PUT("/user/{userID}.json")
     Call<Object> postUser(

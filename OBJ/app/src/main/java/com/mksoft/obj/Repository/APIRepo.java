@@ -16,8 +16,10 @@ import com.mksoft.obj.Component.Activity.FeeedActivity.fragment.UserFriendPickPa
 import com.mksoft.obj.Component.Activity.LoginActivity.Fragment.JoinPageFragment;
 import com.mksoft.obj.Component.Activity.LoginActivity.LoginRootActivity;
 import com.mksoft.obj.Component.Activity.MainActivity;
+import com.mksoft.obj.Repository.DB.FeedDataDao;
 import com.mksoft.obj.Repository.DB.FriendDataDao;
 import com.mksoft.obj.Repository.DB.UserDataDao;
+import com.mksoft.obj.Repository.Data.FeedData;
 import com.mksoft.obj.Repository.Data.FeedRequestData;
 import com.mksoft.obj.Repository.Data.FriendData;
 import com.mksoft.obj.Repository.Data.UserData;
@@ -45,16 +47,19 @@ public class APIRepo {
     private final UserDataDao userDao;
     private final Executor executor;
     private final FriendDataDao friendDataDao;
+    private final FeedDataDao feedDataDao;
 
     @Inject
     public APIRepo(APIService webservice, UserDataDao userDao,
                    FriendDataDao friendDataDao,
+                   FeedDataDao feedDataDao,
                    Executor executor) {
         Log.d("testResultRepo", "make it!!!");
         this.friendDataDao = friendDataDao;
         this.webservice = webservice;
         this.userDao = userDao;
         this.executor = executor;
+        this.feedDataDao = feedDataDao;
     }
     public void checkUser(String userID, final JoinPageFragment joinPageFragment, final TextView stateTextview){
         Call<UserData>call =webservice.checkUser(userID);
@@ -162,12 +167,53 @@ public class APIRepo {
             }
         });
     }
+    public LiveData<List<FeedData>> getFeedListLiveData(){
+        refreshFeedList();
+        return feedDataDao.getFeedDataList();
+    }
+    private void refreshFeedList(){
+        executor.execute(() -> {
+            // Check if user was fetched recently
+            boolean feedListDataExists = (feedDataDao.getFeedData(getMaxRefreshTime(new Date())) != null);
+            //최대 1분전에 룸에 유절르 저장했으면 그거 그냥 리턴 그게 아니면 서버에서 받아와서 룸을 초기화 시켜주고
 
+            // If user have to be updated
+            if (!feedListDataExists) {//확인
+                Log.d("testtarace","request");
+                webservice.getFeedData().enqueue(new Callback<List<FeedData>>() {
+                    @Override
+                    public void onResponse(Call<List<FeedData>> call, Response<List<FeedData>> response) {
+                        Log.e("TAG", "DATA REFRESHED FROM NETWORK");
+                        //Toast.makeText(App.context, "Data refreshed from network !", Toast.LENGTH_LONG).show();
 
+                        executor.execute(() -> {
+                            List<FeedData> feedDataList = response.body();
+                            for(int i =0; i<feedDataList.size(); i++){
+                                Log.d("test190509", feedDataList.get(i).getName());
+                                feedDataList.get(i).setLastRefresh(new Date());
+
+                            }
+                            feedDataDao.deleteAll();
+                            feedDataDao.saveList(feedDataList);
+                        });
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<FeedData>> call, Throwable t) {
+                        Log.d("test190508",t.toString());
+                    }
+                });
+            }else{
+                Log.d("testtarace","no request");
+
+            }
+        });
+    }
     public LiveData<List<FriendData>> getFriendListLiveData(String userLogin){
         refreshFriendList(userLogin);
         return friendDataDao.getFriendListLiveData();
     }
+
     private void refreshFriendList(final String userLogin){
         executor.execute(() -> {
             // Check if user was fetched recently

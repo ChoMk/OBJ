@@ -21,8 +21,12 @@ import com.mksoft.obj.Component.Activity.FeeedActivity.FeedRootActivity;
 import com.mksoft.obj.Component.Activity.FeeedActivity.fragment.OfferedImagePage.OfferedImagePageFragment;
 import com.mksoft.obj.R;
 import com.mksoft.obj.Repository.APIRepo;
+import com.mksoft.obj.Repository.Data.FeedData;
 import com.mksoft.obj.Repository.Data.UserData;
 import com.mksoft.obj.ViewModel.UserProfileViewModel;
+
+import java.util.Collections;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -35,13 +39,14 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import dagger.android.support.AndroidSupportInjection;
 
 public class AllViewFeedPageFragment extends Fragment {
     RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
     FeedAdapter feedAdapter;
-
+    SwipeRefreshLayout mSwipeRefreshLayout;
     @Inject
     ViewModelProvider.Factory viewModelFactory;
     private UserProfileViewModel viewModel;
@@ -75,6 +80,8 @@ public class AllViewFeedPageFragment extends Fragment {
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(UserProfileViewModel.class);
         viewModel.init(FeedRootActivity.feedRootActivity.getAccess_ID());
         viewModel.getUserLiveData().observe(this, userData -> updateUI(userData));
+        viewModel.getFeedListLiveData().observe(this, feedData -> refreshItem(feedData));
+
     }
     private void configureDagger(){
         AndroidSupportInjection.inject(this);
@@ -106,6 +113,14 @@ public class AllViewFeedPageFragment extends Fragment {
     }
 
     private void init(ViewGroup rootView){
+        mSwipeRefreshLayout = rootView.findViewById(R.id.swipe_layout);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                apiRepo.getFeedListLiveData();
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        });
 
         fab = rootView.findViewById(R.id.fab_main);
         userImag = (ImageView)rootView.findViewById(R.id.userIMG);
@@ -159,6 +174,11 @@ public class AllViewFeedPageFragment extends Fragment {
             userNameS = user.getName();
 
         }
+    }
+    private void refreshItem(List<FeedData> feedData){
+        Collections.reverse(feedData);
+        feedAdapter.refreshItem(feedData);
+        mSwipeRefreshLayout.setRefreshing(false);
     }
 
 }

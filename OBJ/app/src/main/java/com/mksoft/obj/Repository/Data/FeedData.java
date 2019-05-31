@@ -1,44 +1,114 @@
 package com.mksoft.obj.Repository.Data;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
+import java.util.Date;
 
-public class FeedData implements Serializable {
+import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
-    private int id = 0;
-    private String userName;
-    private String feedContents;
-    private String GIFPath;
+@Entity
+public class FeedData {
+
+    @PrimaryKey
+    @NonNull
+    @SerializedName("id")
+    @Expose
+    private String id ="";
 
 
-    public int getId() {
-        return id;
+    @SerializedName("name")
+    @Expose
+    private String name="";
+
+
+    @SerializedName("feed_img_url")
+    @Expose
+    private String feedImgUrl="";
+
+
+    @SerializedName("user_img_url")
+    @Expose
+    private String userImgUrl="";
+
+    @SerializedName("feed_contents")
+    @Expose
+    private String feedContents="";
+
+    @SerializedName("feed_like")
+    @Expose
+    private String feedLike="";
+
+
+    private Date lastRefresh = null;
+
+    public FeedData(@NonNull String id, String name, String feedImgUrl, String feedContents
+            ,String feedLike, Date lastRefresh) {
+        this.id = id;
+        this.name = name;
+        this.feedImgUrl = feedImgUrl;
+        this.feedContents = feedContents;
+        this.lastRefresh = lastRefresh;
+        this.feedLike = feedLike;
     }
 
-    public String getUserName() {
-        return userName;
+    public FeedData() {
+    }
+
+    public Date getLastRefresh() {
+        return lastRefresh;
+    }
+    public void setLastRefresh(Date lastRefresh) {
+        this.lastRefresh = lastRefresh;
+    }
+
+    public String getId() {
+        return id;
+    }
+    public void setId(String id) {
+        this.id = id;
+    }
+
+
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+
+
+    public String getFeedImgUrl() {
+        return feedImgUrl;
+    }
+
+    public void setFeedImgUrl(String feedImgUrl) {
+        this.feedImgUrl = feedImgUrl;
     }
 
     public String getFeedContents() {
         return feedContents;
     }
-
-    public String getGIFPath() {
-        return GIFPath;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
     public void setFeedContents(String feedContents) {
         this.feedContents = feedContents;
     }
 
-    public void setGifPath(String gifPath) {
-        this.GIFPath = gifPath;
+    public String getFeedLike() {
+        return feedLike;
+    }
+
+    public void setFeedLike(String feedLike) {
+        this.feedLike = feedLike;
+    }
+
+    public String getUserImgUrl() {
+        return userImgUrl;
+    }
+
+    public void setUserImgUrl(String userImgUrl) {
+        this.userImgUrl = userImgUrl;
     }
 }
