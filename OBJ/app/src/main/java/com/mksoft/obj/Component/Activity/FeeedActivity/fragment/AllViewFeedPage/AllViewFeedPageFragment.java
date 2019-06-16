@@ -25,6 +25,7 @@ import com.mksoft.obj.Repository.Data.FeedData;
 import com.mksoft.obj.Repository.Data.UserData;
 import com.mksoft.obj.ViewModel.UserProfileViewModel;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -61,8 +62,7 @@ public class AllViewFeedPageFragment extends Fragment {
     @Inject
     APIRepo apiRepo;
 
-
-
+    int feedSize = 0;
 
     @Override
     public void onAttach(Context context) {
@@ -83,6 +83,7 @@ public class AllViewFeedPageFragment extends Fragment {
         viewModel.getFeedListLiveData().observe(this, feedData -> refreshItem(feedData));
 
     }
+
     private void configureDagger(){
         AndroidSupportInjection.inject(this);
     }
@@ -178,6 +179,7 @@ public class AllViewFeedPageFragment extends Fragment {
     private void refreshItem(List<FeedData> feedData){
         Collections.reverse(feedData);
         feedAdapter.refreshItem(feedData);
+
         mSwipeRefreshLayout.setRefreshing(false);
     }
 

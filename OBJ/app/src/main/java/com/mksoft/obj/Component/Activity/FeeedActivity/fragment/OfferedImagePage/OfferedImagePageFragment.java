@@ -101,8 +101,10 @@ public class OfferedImagePageFragment extends Fragment implements FeedRootActivi
     private void makeOfferedList(){
         ArrayList<OfferedImageData> offeredImageDataList = new ArrayList<>();
 
+        offeredImageDataList.add(new OfferedImageData(0, "게임댄스", R.drawable.test06101005));
         offeredImageDataList.add(new OfferedImageData(1, "커플댄스", R.drawable.test1));
-        offeredImageDataList.add(new OfferedImageData(2, "흔들어~", R.drawable.test2));
+        offeredImageDataList.add(new OfferedImageData(3, "학원물", R.drawable.test3));
+        offeredImageDataList.add(new OfferedImageData(2, "흔들어~", R.drawable.test06101006));
 
 
 

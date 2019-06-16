@@ -37,7 +37,7 @@ public interface APIService {
             @Path("userID") String userID,
             @Body UserData userData
     );
-    @PUT("/make_feed_request/{feedID}.json")
+    @PUT("/Request/{feedID}.json")
     Call<Object> postMakeFeedRequest(
             @Path("feedID") String feedID,
             @Body FeedRequestData feedRequestData

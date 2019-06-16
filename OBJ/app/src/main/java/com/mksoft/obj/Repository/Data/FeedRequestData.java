@@ -1,41 +1,31 @@
 package com.mksoft.obj.Repository.Data;
 
 public class FeedRequestData {
-    String user1;
-    String user2;
-    String pickImage;
+    String Attr1;
+    String Attr2;
 
     public FeedRequestData(){
 
     }
 
-    public FeedRequestData(String user1, String user2, String pickImage) {
-        this.user1 = user1;
-        this.user2 = user2;
-        this.pickImage = pickImage;
+    public FeedRequestData(String Attr1, String Attr2) {
+        this.Attr1 = Attr1;
+        this.Attr2 = Attr2;
     }
 
-    public String getUser1() {
-        return user1;
+    public String getAttr1() {
+        return Attr1;
     }
 
-    public void setUser1(String user1) {
-        this.user1 = user1;
+    public void setAttr1(String attr1) {
+        Attr1 = attr1;
     }
 
-    public String getUser2() {
-        return user2;
+    public String getAttr2() {
+        return Attr2;
     }
 
-    public void setUser2(String user2) {
-        this.user2 = user2;
-    }
-
-    public String getPickImage() {
-        return pickImage;
-    }
-
-    public void setPickImage(String pickImage) {
-        this.pickImage = pickImage;
+    public void setAttr2(String attr2) {
+        Attr2 = attr2;
     }
 }

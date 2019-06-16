@@ -14,8 +14,8 @@
         <ImageView
             android:id="@+id/regestUserImg"
             android:layout_margin="2dp"
-            android:layout_width="40dp"
-            android:layout_height="40dp"/>
+            android:layout_width="35dp"
+            android:layout_height="35dp"/>
 
 
         <TextView
@@ -25,14 +25,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="user1"
-            android:textSize="30dp"
+            android:textSize="25dp"
             android:textStyle="bold" />
         <ImageView
             android:layout_alignParentRight="true"
             android:layout_gravity="center"
             android:layout_margin="2dp"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:src="@drawable/thrpoint" />
     </RelativeLayout>
 
@@ -52,29 +52,29 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
             <ImageView
-                android:layout_margin="2dp"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_margin="5dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:src="@drawable/heart" />
             <ImageView
 
-                android:layout_margin="2dp"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_margin="5dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:src="@drawable/dialog" />
             <ImageView
 
-                android:layout_margin="2dp"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_margin="5dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:src="@drawable/paperairplane" />
 
         </LinearLayout>
         <ImageView
             android:layout_alignParentRight="true"
             android:layout_margin="2dp"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:src="@drawable/bookmark" />
     </RelativeLayout>
     <TextView

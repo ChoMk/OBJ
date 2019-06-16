@@ -141,10 +141,10 @@ public class UserFriendPickPageFragment extends Fragment implements FeedRootActi
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         FeedRequestData feedRequestData = new FeedRequestData();
-                        feedRequestData.setPickImage(selectedOfferedImageName);
-                        feedRequestData.setUser1(userName);
-                        feedRequestData.setUser2(userFriendAdapter.getItem(userFriendAdapter.getLastSelectedPosition()).getName());
-                        apiRepo.postMakeFeedRequest(feedRequestData, userFriendPickPageFragment);
+                        feedRequestData.setAttr2(selectedOfferedImageName);
+
+                        feedRequestData.setAttr1(userFriendAdapter.getItem(userFriendAdapter.getLastSelectedPosition()).getName());
+                        apiRepo.postMakeFeedRequest(userName, feedRequestData, userFriendPickPageFragment);
                     }
                 });
         builder.setNegativeButton("아니오",

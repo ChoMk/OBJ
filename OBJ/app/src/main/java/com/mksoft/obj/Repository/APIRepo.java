@@ -87,10 +87,8 @@ public class APIRepo {
             }
         });
     }
-    public void postMakeFeedRequest(FeedRequestData feedRequestData, final UserFriendPickPageFragment userFriendPickPageFragment){
-        Call<Object>call = webservice.postMakeFeedRequest(feedRequestData.getPickImage()
-                +feedRequestData.getUser1()+feedRequestData.getUser2(), feedRequestData);
-        Log.d("dkdkdkdkefek", feedRequestData.getPickImage()+feedRequestData.getUser1()+feedRequestData.getUser2());
+    public void postMakeFeedRequest(String user,FeedRequestData feedRequestData, final UserFriendPickPageFragment userFriendPickPageFragment){
+        Call<Object>call = webservice.postMakeFeedRequest(user, feedRequestData);
         call.enqueue(new Callback<Object>() {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
